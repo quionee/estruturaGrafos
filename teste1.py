@@ -1,63 +1,120 @@
 
-arquivo = open("n10_undir_unwgt_comb3.txt")
-tipo = arquivo.readline()
+def leArquivo(nomeArq, valorado):
+	arquivo = open(nomeArq)
+	tipo = arquivo.readline()
 
-qtdArestas = 0
-while arquivo.readline():
-	qtdArestas += 1
+	qtdArestas = 0
+	while arquivo.readline():
+		qtdArestas += 1
 
-arquivo.seek(0)
-arquivo.readline()
+	arquivo.seek(0)
+	arquivo.readline()
 
-oi = []
-lista = []
-for i in range(qtdArestas):
-	oi = arquivo.readline()
-	valores = oi.split(" ")
-	lista.append(int(valores[0]))
-	lista.append(int(valores[1]))
+	aux = []
+	lista = []
+	if valorado:
+		for i in range(qtdArestas):
+			aux = arquivo.readline()
+			valores = aux.split(" ")
+			lista.append(int(valores[0]))
+			lista.append(int(valores[1]))
+			lista.append(int(valores[2]))
+	else:
+		for i in range(qtdArestas):
+			aux = arquivo.readline()
+			valores = aux.split(" ")
+			lista.append(int(valores[0]))
+			lista.append(int(valores[1]))
 
-qtdVertices = max(lista) + 1
+	return lista
 
-def MatrizIncidencia(lista):
-	matrizIncidencia = [0] * qtdArestas
+def getTipo(nomeArq):
+	arquivo = open(nomeArq)
+	return arquivo.readline() 
+	
+def getQtdVertices(lista):
+	return max(lista) + 1
 
-	for lin in range(qtdArestas):
-		matrizIncidencia[lin] = [0] * qtdVertices
+def getQtdArestas(lista):
+	return len(lista) / 2
+
+# estrutura de dado: lista de adjacencia
+def matrizAdjacencia(lista, tipo, valorado):
+	qtdVertices = getQtdVertices(lista)
+	qtdArestas = getQtdArestas(lista)
+
+	print "TO NA MATRIZ ADJACENCIA"
+
+	j = 0
+	if valorado:
+		listaAux = []
+		aux = 0
+		while aux < len(lista):
+			listaAux.append(lista[aux])
+			listaAux.append(lista[aux + 1])
+			aux += 3
 		
-	for i in range(qtdArestas):
-		print(matrizIncidencia[i])
+		qtdVertices = max(listaAux) + 1
+		qtdArestas = getQtdArestas(listaAux)
+		
+		print qtdVertices
+		print qtdArestas
+		
+		matriz = [0] * qtdVertices
+		
+		for lin in range(qtdVertices):
+			matriz[lin] = [0] * qtdVertices
+		
+		#~ # direcionado
+		if tipo[0] == "D":
+			for i in range(qtdArestas):
+				a = lista[j]
+				b = lista[j + 1]
+				matriz[a][b] = lista[j + 2]
+				j += 3
 
-	j = 0
-	#~ # direcionado
-	if tipo[0] == "D":
-		print("grafo direcionado")
-		for i in range(qtdArestas):
-			a = lista[j]
-			b = lista[j + 1]
-			matrizIncidencia[i][a] = 1
-			matrizIncidencia[i][b] = -1
-			j += 2
-
-	#~ # nao-direcionado
+		#~ # nao-direcionado
+		else:
+			for i in range(qtdArestas):
+				a = lista[j]
+				b = lista[j + 1]
+				matriz[a][b] = lista[j + 2]
+				matriz[b][a] = lista[j + 2]
+				j += 3
+		
 	else:
-		print("grafo nao-direcionado")
-		for i in range(qtdArestas):
-			a = lista[j]
-			b = lista[j + 1]
-			matrizIncidencia[i][a] = 1
-			matrizIncidencia[i][b] = 1
-			j += 2
+		matriz = [0] * qtdVertices
 
-	print("\nMatriz de Incidencia: \n")
+		for lin in range(qtdVertices):
+			matriz[lin] = [0] * qtdVertices
+		#~ # direcionado
+		if tipo[0] == "D":
+			for i in range(qtdArestas):
+				a = lista[j]
+				b = lista[j + 1]
+				matriz[a][b] = 1
+				j += 2
+
+		#~ # nao-direcionado
+		else:
+			for i in range(qtdArestas):
+				a = lista[j]
+				b = lista[j + 1]
+				matriz[a][b] = 1
+				matriz[b][a] = 1
+				j += 2
+		
+	return matriz
+
+# estrutura de dado: matriz de incidencia
+def matrizIncidencia(lista, tipo):
+	qtdVertices = getQtdVertices(lista)
+	qtdArestas = getQtdArestas(lista)
+	
+	matriz = [0] * qtdArestas
+
 	for lin in range(qtdArestas):
-		print(matrizIncidencia[lin])
-
-def MatrizAdjacencia(lista):
-	matrizAdjacencia = [0] * qtdVertices
-
-	for lin in range(qtdVertices):
-		matrizAdjacencia[lin] = [0] * qtdVertices
+		matriz[lin] = [0] * qtdVertices
 
 	j = 0
 	#~ # direcionado
@@ -65,7 +122,8 @@ def MatrizAdjacencia(lista):
 		for i in range(qtdArestas):
 			a = lista[j]
 			b = lista[j + 1]
-			matrizAdjacencia[a][b] = 1
+			matriz[i][a] = 1
+			matriz[i][b] = -1
 			j += 2
 
 	#~ # nao-direcionado
@@ -73,17 +131,17 @@ def MatrizAdjacencia(lista):
 		for i in range(qtdArestas):
 			a = lista[j]
 			b = lista[j + 1]
-			matrizAdjacencia[a][b] = 1
-			matrizAdjacencia[b][a] = 1
+			matriz[i][a] = 1
+			matriz[i][b] = 1
 			j += 2
 
-	print("\n\nMatriz de Adjacencia: \n")
-	for i in range(qtdVertices):
-		print(matrizAdjacencia[i])
+	return matriz
 
-	print(matrizAdjacencia)
-
-def ListaAdjacencia(lista):
+# estrutura de dados: lista de adjacencia
+def listaAdjacencia(lista, tipo):
+	qtdVertices = getQtdVertices(lista)
+	qtdArestas = getQtdArestas(lista)
+	
 	listaAdjacencia = [0] * qtdVertices
 
 	for lin in range(qtdVertices):
@@ -106,8 +164,75 @@ def ListaAdjacencia(lista):
 			listaAdjacencia[a].append(b)
 			listaAdjacencia[b].append(a)
 			j += 2
+	
+	return listaAdjacencia
 
-	for i in range(qtdVertices):
-		print [i], '->' , listaAdjacencia[i]
+def imprimeMatrizAdjacencia(matriz):
+	print "\nMatriz de Adjacencia: \n"
+	for i in range(len(matriz)):
+		print(matriz[i])
 
-ListaAdjacencia(lista)
+def imprimeMatrizIncidencia(matriz):
+	print "\nMatriz de Incidencia: \n"
+	for lin in range(len(matriz)):
+		print(matriz[lin])
+		
+def imprimeListaAdjacencia(lista):
+	print "\nLista de Adjacencias: \n"	
+	for i in range(len(lista)):
+		print [i], '->', lista[i]
+
+# converte matriz adjacencia para lista auxiliar
+def convMatAdList(matriz):
+	listaAux = []
+	if tipo[0] == "D":
+		for lin in range(qtdVertices):
+			for col in range(qtdVertices):
+				if (matriz[lin][col] == 1):
+					listaAux.append(lin)
+					listaAux.append(col)
+	else:
+		for lin in range(qtdVertices):
+			for col in range(qtdVertices):
+				if (matriz[lin][col] == 1):
+					listaAux.append(lin)
+					listaAux.append(col)
+					matriz[col][lin] = 0
+	
+	return listaAux
+
+# converte matriz de adjancencia para matriz de incidencia
+def convMatAdMatInc(matrizAd):
+	return matrizIncidencia(convMatAdList(matrizAd))
+	
+# converte matriz de adjacencia para lista de adjacencia
+def convMatAdListAd(matrizAd):
+	return ListaAdjacencia(convMatAdList(matrizAd))
+
+
+def main():
+	nomeArq = raw_input()
+	arquivo = open(nomeArq)
+	tipo = arquivo.readline()
+	valorado = False
+	aux = arquivo.readline()
+	valor = aux.split(" ")
+	if valor[2] != "\n":
+		valorado = True
+	
+	#~ listaAdj = listaAdjacencia(leArquivo(nomeArq), tipo)
+	#~ imprimeListaAdjacencia(listaAdj)
+	#~ matrizInc = matrizIncidencia(leArquivo(nomeArq), tipo)
+	#~ imprimeMatrizIncidencia(matrizInc)
+	matrizAd = matrizAdjacencia(leArquivo(nomeArq, valorado), tipo, valorado)
+	imprimeMatrizAdjacencia(matrizAd)
+	
+	
+	
+	print tipo
+	#~ listaAdj = convMatAdListAd(matrizAd)
+	#~ imprimeListaAdjacencia(listaAdj)
+	
+
+if __name__ == "__main__":
+	main()
