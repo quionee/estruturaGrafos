@@ -38,27 +38,32 @@ def getQtdVertices(lista):
 def getQtdArestas(lista):
 	return len(lista) / 2
 
+def getQtdArestasValorado(lista):
+	listaAux = []
+	aux = 0
+	while aux < len(lista):
+		listaAux.append(lista[aux])
+		listaAux.append(lista[aux + 1])
+		aux += 3
+
+	return getQtdArestas(listaAux)
+
+def getQtdVerticesValorado(lista):
+	listaAux = []
+	aux = 0
+	while aux < len(lista):
+		listaAux.append(lista[aux])
+		listaAux.append(lista[aux + 1])
+		aux += 3
+	
+	return max(listaAux) + 1
+
 # estrutura de dado: lista de adjacencia
 def matrizAdjacencia(lista, tipo, valorado):
-	qtdVertices = getQtdVertices(lista)
-	qtdArestas = getQtdArestas(lista)
-
-	print "TO NA MATRIZ ADJACENCIA"
-
 	j = 0
 	if valorado:
-		listaAux = []
-		aux = 0
-		while aux < len(lista):
-			listaAux.append(lista[aux])
-			listaAux.append(lista[aux + 1])
-			aux += 3
-		
-		qtdVertices = max(listaAux) + 1
-		qtdArestas = getQtdArestas(listaAux)
-		
-		print qtdVertices
-		print qtdArestas
+		qtdVertices = getQtdVerticesValorado(lista)
+		qtdArestas = getQtdArestasValorado(lista)
 		
 		matriz = [0] * qtdVertices
 		
@@ -83,6 +88,9 @@ def matrizAdjacencia(lista, tipo, valorado):
 				j += 3
 		
 	else:
+		qtdVertices = getQtdVertices(lista)
+		qtdArestas = getQtdArestas(lista)
+		
 		matriz = [0] * qtdVertices
 
 		for lin in range(qtdVertices):
@@ -113,18 +121,8 @@ def matrizIncidencia(lista, tipo, valorado):
 	
 	j = 0
 	if valorado:
-		listaAux = []
-		aux = 0
-		while aux < len(lista):
-			listaAux.append(lista[aux])
-			listaAux.append(lista[aux + 1])
-			aux += 3
-		
-		qtdVertices = max(listaAux) + 1
-		qtdArestas = getQtdArestas(listaAux)
-		
-		print qtdVertices
-		print qtdArestas
+		qtdVertices = getQtdVerticesValorado(lista)
+		qtdArestas = getQtdArestasValorado(lista)
 		
 		matriz = [0] * qtdArestas
 
@@ -180,18 +178,8 @@ def listaAdjacencia(lista, tipo, valorado):
 	qtdArestas = getQtdArestas(lista)
 	
 	if valorado:
-		listaAux = []
-		aux = 0
-		while aux < len(lista):
-			listaAux.append(lista[aux])
-			listaAux.append(lista[aux + 1])
-			aux += 3
-		
-		qtdVertices = max(listaAux) + 1
-		qtdArestas = getQtdArestas(listaAux)
-		
-		print qtdVertices
-		print qtdArestas
+		qtdVertices = getQtdVerticesValorado(lista)
+		qtdArestas = getQtdArestasValorado(lista)
 		
 		listaAdjacencia = [0] * qtdVertices
 
@@ -259,32 +247,146 @@ def imprimeListaAdjacencia(lista):
 		print [i], '->', lista[i]
 
 # converte matriz adjacencia para lista auxiliar
-def convMatAdList(matriz):
+def convMatAdList(matriz, tipo, valorado):
+	qtdVertices = len(matriz)
+	qtdArestas = len(matriz)
 	listaAux = []
-	if tipo[0] == "D":
-		for lin in range(qtdVertices):
-			for col in range(qtdVertices):
-				if (matriz[lin][col] == 1):
-					listaAux.append(lin)
-					listaAux.append(col)
+	if valorado:
+		if tipo[0] == "D":
+			for lin in range(qtdVertices):
+				for col in range(qtdVertices):
+					if (matriz[lin][col] != 0):
+						listaAux.append(lin)
+						listaAux.append(col)
+						listaAux.append(matriz[lin][col])
+		else:
+			for lin in range(qtdVertices):
+				for col in range(qtdVertices):
+					if (matriz[lin][col] != 0):
+						listaAux.append(lin)
+						listaAux.append(col)
+						listaAux.append(matriz[lin][col])
+						matriz[col][lin] = 0
 	else:
-		for lin in range(qtdVertices):
-			for col in range(qtdVertices):
-				if (matriz[lin][col] == 1):
-					listaAux.append(lin)
-					listaAux.append(col)
-					matriz[col][lin] = 0
-	
+		if tipo[0] == "D":
+			for lin in range(qtdVertices):
+				for col in range(qtdVertices):
+					if (matriz[lin][col] == 1):
+						listaAux.append(lin)
+						listaAux.append(col)
+		else:
+			for lin in range(qtdVertices):
+				for col in range(qtdVertices):
+					if (matriz[lin][col] == 1):
+						listaAux.append(lin)
+						listaAux.append(col)
+						matriz[col][lin] = 0
 	return listaAux
 
 # converte matriz de adjancencia para matriz de incidencia
-def convMatAdMatInc(matrizAd):
-	return matrizIncidencia(convMatAdList(matrizAd))
+def convMatAdMatInc(matrizAd, tipo, valorado):
+	return matrizIncidencia(convMatAdList(matrizAd, tipo, valorado), tipo, valorado)
 	
 # converte matriz de adjacencia para lista de adjacencia
-def convMatAdListAd(matrizAd):
-	return ListaAdjacencia(convMatAdList(matrizAd))
+def convMatAdListAd(matrizAd, tipo, valorado):
+	return listaAdjacencia(convMatAdList(matrizAd, tipo, valorado), tipo, valorado)
 
+# converte matriz de incidencia para lista auxiliar
+def convMatIncList(matriz, tipo, valorado):
+	qtdVertices = len(matriz[0])
+	qtdArestas = len(matriz)
+	listaAux = []
+	if valorado:
+		if tipo[0] == "D":
+			for lin in range(qtdArestas):
+				for col in range(qtdVertices):
+					if (matriz[lin][col] > 0):
+						a = col
+					elif (matriz[lin][col] < 0):
+						b = col
+				listaAux.append(a)
+				listaAux.append(b)
+				listaAux.append(matriz[lin][a])
+		else:
+			for lin in range(qtdArestas):
+				for col in range(qtdVertices):
+					if (matriz[lin][col] > 0):
+						listaAux.append(col)
+						valor = matriz[lin][col]
+				listaAux.append(valor)
+	else:
+		if tipo[0] == "D":
+			for lin in range(qtdArestas):
+				for col in range(qtdVertices):
+					if (matriz[lin][col] == 1):
+						a = col
+					elif (matriz[lin][col] == -1):
+						b = col
+				listaAux.append(a)
+				listaAux.append(b)
+		else:
+			for lin in range(qtdArestas):
+				for col in range(qtdVertices):
+					if (matriz[lin][col] == 1):
+						listaAux.append(col)
+	
+	return listaAux
+
+# converte matriz de incidencia para matriz de adjancencia
+def convMatIncMatAd(matrizAd, tipo, valorado):
+	return matrizAdjacencia(convMatIncList(matrizAd, tipo, valorado), tipo, valorado)
+	
+# converte matriz de incidencia para lista de adjancencia
+def convMatIncListAd(matrizAd, tipo, valorado):
+	return listaAdjacencia(convMatIncList(matrizAd, tipo, valorado), tipo, valorado)
+
+# converte lista de adjacencia para lista auxiliar
+def convListAdList(lista, tipo, valorado):
+	qtdVertices = len(lista)
+	listaAux = []
+	if valorado:
+		if tipo[0] == "D":
+			for i in range(qtdVertices):
+				qtdArestas = len(lista[i])
+				for j in range(qtdArestas):
+					listaAux.append(i)
+					listaAux.append(lista[i][j][0])
+					listaAux.append(lista[i][j][1])
+
+		else:
+			for i in range(qtdVertices):
+				qtdArestas = len(lista[i])
+				for j in range(qtdArestas):
+					if lista[i][j] != -1:
+						listaAux.append(i)
+						listaAux.append(lista[i][j][0])
+						listaAux.append(lista[i][j][1])
+						del lista[lista[i][j][0]][0]
+						
+	else:
+		if tipo[0] == "D":
+			for i in range(qtdVertices):
+				qtdArestas = len(lista[i])
+				for j in range(qtdArestas):
+					listaAux.append(i)
+					listaAux.append(lista[i][j])
+		else:
+			for i in range(qtdVertices):
+				qtdArestas = len(lista[i])
+				if qtdArestas > 0:
+					for j in range(qtdArestas):
+						listaAux.append(i)
+						listaAux.append(lista[i][j])
+						del lista[lista[i][j]][0]	
+	return listaAux
+
+# converte lista de adjacencia para matriz de adjancencia
+def convListAdMatAd(lista, tipo, valorado):
+	return matrizAdjacencia(convListAdList(lista, tipo, valorado), tipo, valorado)
+	
+# converte lista de adjancencia para matriz de incidencia
+def convListAdMatInc(lista, tipo, valorado):
+	return matrizIncidencia(convListAdList(lista, tipo, valorado), tipo, valorado)
 
 def main():
 	nomeArq = raw_input()
@@ -298,16 +400,24 @@ def main():
 	
 	listaAdj = listaAdjacencia(leArquivo(nomeArq, valorado), tipo, valorado)
 	imprimeListaAdjacencia(listaAdj)
-	matrizInc = matrizIncidencia(leArquivo(nomeArq, valorado), tipo, valorado)
-	imprimeMatrizIncidencia(matrizInc)
-	matrizAd = matrizAdjacencia(leArquivo(nomeArq, valorado), tipo, valorado)
-	imprimeMatrizAdjacencia(matrizAd)
+	#~ matrizInc = matrizIncidencia(leArquivo(nomeArq, valorado), tipo, valorado)
+	#~ imprimeMatrizIncidencia(matrizInc)
+	#~ matrizAd = matrizAdjacencia(leArquivo(nomeArq, valorado), tipo, valorado)
+	#~ imprimeMatrizAdjacencia(matrizAd)
+	#~ convListAdMatAd(listaAdj, tipo, valorado)
+	#~ imprimeMatrizAdjacencia(convListAdMatAd(listaAdj, tipo, valorado))
+	matAd = convListAdMatAd(listaAdj, tipo, valorado)
+	#~ print matAd
+	imprimeMatrizAdjacencia(matAd)
+	#~ lis = convMatAdListAd(matAd, tipo, valorado)
+	#~ imprimeListaAdjacencia(lis)
+	matInc = convMatAdMatInc(matAd, tipo, valorado)
+	imprimeMatrizIncidencia(matInc)
 	
-	
-	
-	print tipo
-	#~ listaAdj = convMatAdListAd(matrizAd)
-	#~ imprimeListaAdjacencia(listaAdj)
+	#~ print "lista"
+	imprimeListaAdjacencia(convMatIncListAd(matrizInc, tipo, valorado))
+	#~ print "matriz"
+	imprimeMatrizAdjacencia(convMatIncMatAd(matrizInc, tipo, valorado))
 	
 
 if __name__ == "__main__":
