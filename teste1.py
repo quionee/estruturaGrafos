@@ -399,7 +399,7 @@ def obtemVizinhos(estrutura, vertice, valorado):
 		return conjuntoVizinhos
 	return estrutura[vertice]
 
-# obtem pred
+# obtem predecessores
 def obtemPred(estrutura, vertice, aux):
 	qtdVertices = len(estrutura[0])
 	qtdArestas = len(estrutura)
@@ -415,8 +415,21 @@ def obtemPred(estrutura, vertice, aux):
 						obtemPred(estrutura, j, aux)
 	return aux
 					
-		
-		
+# obtem sucessores	
+def obtemSuc(estrutura, vertice, aux):
+	qtdVertices = len(estrutura[0])
+	qtdArestas = len(estrutura)
+	for i in range(qtdArestas):
+		if estrutura[i][vertice] > 0:
+			for j in range(qtdVertices):
+				if estrutura[i][j] < 0:
+					jaExiste = False
+					if any(k == j for k in aux):
+						jaExiste = True
+					if not(jaExiste):
+						aux.append(j)
+						obtemSuc(estrutura, j, aux)
+	return aux		
 
 def main():
 	nomeArq = raw_input()
@@ -455,18 +468,30 @@ def main():
 	#~ vertice = input("Vertice: ")
 	#~ print obtemVizinhos(estrutura, vertice, valorado)
 	
-	# obtem predecessor
+	# obtem predecessores
+	#~ if tipoEstrutura != "I":
+		#~ if tipoEstrutura == "A":
+			#~ estrutura = convMatAdMatInc(estrutura, tipo, valorado)
+		#~ elif tipoEstrutura == "L":
+			#~ estrutura = convListAdMatInc(estrutura, tipo, valorado)
+		#~ tipoEstrutura = "I"
+	
+	#~ vertice = input("Vertice: ")
+	#~ aux = []
+	#~ print obtemPred(estrutura, vertice, aux)
+	
+	# obtem sucessores
 	if tipoEstrutura != "I":
 		if tipoEstrutura == "A":
 			estrutura = convMatAdMatInc(estrutura, tipo, valorado)
-		elif tipoEstrutura == "I":
+		elif tipoEstrutura == "L":
 			estrutura = convListAdMatInc(estrutura, tipo, valorado)
 		tipoEstrutura = "I"
+		#~ imprimeMatrizIncidencia(estrutura)
 	
 	vertice = input("Vertice: ")
 	aux = []
-	print obtemPred(estrutura, vertice, aux)
-	
+	print obtemSuc(estrutura, vertice, aux)
 	
 	#~ convListAdMatAd(listaAdj, tipo, valorado)
 	#~ imprimeMatrizAdjacencia(convListAdMatAd(listaAdj, tipo, valorado))
