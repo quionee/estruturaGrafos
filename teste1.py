@@ -1,4 +1,4 @@
-
+# certo
 def leArquivo(nomeArq, valorado):
 	arquivo = open(nomeArq)
 	tipo = arquivo.readline()
