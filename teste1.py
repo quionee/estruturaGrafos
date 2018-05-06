@@ -388,6 +388,36 @@ def convListAdMatAd(lista, tipo, valorado):
 def convListAdMatInc(lista, tipo, valorado):
 	return matrizIncidencia(convListAdList(lista, tipo, valorado), tipo, valorado)
 
+
+
+# obtem vizinho
+def obtemVizinhos(estrutura, vertice, valorado):
+	conjuntoVizinhos = []
+	if valorado:
+		for i in range(len(estrutura[vertice])):
+			conjuntoVizinhos.append(estrutura[vertice][i][0])
+		return conjuntoVizinhos
+	return estrutura[vertice]
+
+# obtem pred
+def obtemPred(estrutura, vertice, aux):
+	qtdVertices = len(estrutura[0])
+	qtdArestas = len(estrutura)
+	for i in range(qtdArestas):
+		if estrutura[i][vertice] < 0:
+			for j in range(qtdVertices):
+				if estrutura[i][j] > 0:
+					jaExiste = False
+					if any(k == j for k in aux):
+						jaExiste = True
+					if not(jaExiste):
+						aux.append(j)
+						obtemPred(estrutura, j, aux)
+	return aux
+					
+		
+		
+
 def main():
 	nomeArq = raw_input()
 	arquivo = open(nomeArq)
@@ -398,26 +428,60 @@ def main():
 	if valor[2] != "\n":
 		valorado = True
 	
-	listaAdj = listaAdjacencia(leArquivo(nomeArq, valorado), tipo, valorado)
-	imprimeListaAdjacencia(listaAdj)
-	#~ matrizInc = matrizIncidencia(leArquivo(nomeArq, valorado), tipo, valorado)
-	#~ imprimeMatrizIncidencia(matrizInc)
-	#~ matrizAd = matrizAdjacencia(leArquivo(nomeArq, valorado), tipo, valorado)
-	#~ imprimeMatrizAdjacencia(matrizAd)
+	
+	# matriz adjancencia = A
+	# matriz incidencia = I
+	# lista adjacencia = L
+	tipoEstrutura = raw_input("Tipo de estrutura: ")
+	
+	if tipoEstrutura == "A":
+		estrutura = matrizAdjacencia(leArquivo(nomeArq, valorado), tipo, valorado)
+		imprimeMatrizAdjacencia(estrutura)
+	elif tipoEstrutura == "I":
+		estrutura = matrizIncidencia(leArquivo(nomeArq, valorado), tipo, valorado)
+		imprimeMatrizIncidencia(estrutura)
+	elif tipoEstrutura == "L":
+		estrutura = listaAdjacencia(leArquivo(nomeArq, valorado), tipo, valorado)
+		imprimeListaAdjacencia(estrutura)
+	
+	# obtem vertice
+	#~ if tipoEstrutura != "L":
+		#~ if tipoEstrutura == "A":
+			#~ estrutura = convMatAdListAd(estrutura, tipo, valorado)
+		#~ elif tipoEstrutura == "I":
+			#~ estrutura = convMatIncListAd(estrutura, tipo, valorado)
+		#~ tipoEstrutura = "L"
+	
+	#~ vertice = input("Vertice: ")
+	#~ print obtemVizinhos(estrutura, vertice, valorado)
+	
+	# obtem predecessor
+	if tipoEstrutura != "I":
+		if tipoEstrutura == "A":
+			estrutura = convMatAdMatInc(estrutura, tipo, valorado)
+		elif tipoEstrutura == "I":
+			estrutura = convListAdMatInc(estrutura, tipo, valorado)
+		tipoEstrutura = "I"
+	
+	vertice = input("Vertice: ")
+	aux = []
+	print obtemPred(estrutura, vertice, aux)
+	
+	
 	#~ convListAdMatAd(listaAdj, tipo, valorado)
 	#~ imprimeMatrizAdjacencia(convListAdMatAd(listaAdj, tipo, valorado))
-	matAd = convListAdMatAd(listaAdj, tipo, valorado)
+	#~ matAd = convListAdMatAd(listaAdj, tipo, valorado)
 	#~ print matAd
-	imprimeMatrizAdjacencia(matAd)
+	#~ imprimeMatrizAdjacencia(matAd)
 	#~ lis = convMatAdListAd(matAd, tipo, valorado)
 	#~ imprimeListaAdjacencia(lis)
-	matInc = convMatAdMatInc(matAd, tipo, valorado)
-	imprimeMatrizIncidencia(matInc)
+	#~ matInc = convMatAdMatInc(matAd, tipo, valorado)
+	#~ imprimeMatrizIncidencia(matInc)
 	
 	#~ print "lista"
-	imprimeListaAdjacencia(convMatIncListAd(matrizInc, tipo, valorado))
+	#~ imprimeListaAdjacencia(convMatIncListAd(matrizInc, tipo, valorado))
 	#~ print "matriz"
-	imprimeMatrizAdjacencia(convMatIncMatAd(matrizInc, tipo, valorado))
+	#~ imprimeMatrizAdjacencia(convMatIncMatAd(matrizInc, tipo, valorado))
 	
 
 if __name__ == "__main__":
