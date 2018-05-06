@@ -107,63 +107,139 @@ def matrizAdjacencia(lista, tipo, valorado):
 	return matriz
 
 # estrutura de dado: matriz de incidencia
-def matrizIncidencia(lista, tipo):
+def matrizIncidencia(lista, tipo, valorado):
 	qtdVertices = getQtdVertices(lista)
 	qtdArestas = getQtdArestas(lista)
 	
-	matriz = [0] * qtdArestas
-
-	for lin in range(qtdArestas):
-		matriz[lin] = [0] * qtdVertices
-
 	j = 0
-	#~ # direcionado
-	if tipo[0] == "D":
-		for i in range(qtdArestas):
-			a = lista[j]
-			b = lista[j + 1]
-			matriz[i][a] = 1
-			matriz[i][b] = -1
-			j += 2
+	if valorado:
+		listaAux = []
+		aux = 0
+		while aux < len(lista):
+			listaAux.append(lista[aux])
+			listaAux.append(lista[aux + 1])
+			aux += 3
+		
+		qtdVertices = max(listaAux) + 1
+		qtdArestas = getQtdArestas(listaAux)
+		
+		print qtdVertices
+		print qtdArestas
+		
+		matriz = [0] * qtdArestas
 
-	#~ # nao-direcionado
+		for lin in range(qtdArestas):
+			matriz[lin] = [0] * qtdVertices
+			
+		#~ # direcionado
+		if tipo[0] == "D":
+			for i in range(qtdArestas):
+				a = lista[j]
+				b = lista[j + 1]
+				matriz[i][a] = lista[j + 2]
+				matriz[i][b] = -lista[j + 2]
+				j += 3
+
+		#~ # nao-direcionado
+		else:
+			for i in range(qtdArestas):
+				a = lista[j]
+				b = lista[j + 1]
+				matriz[i][a] = lista[j + 2]
+				matriz[i][b] = lista[j + 2]
+				j += 3
 	else:
-		for i in range(qtdArestas):
-			a = lista[j]
-			b = lista[j + 1]
-			matriz[i][a] = 1
-			matriz[i][b] = 1
-			j += 2
+		matriz = [0] * qtdArestas
+
+		for lin in range(qtdArestas):
+			matriz[lin] = [0] * qtdVertices
+
+		#~ # direcionado
+		if tipo[0] == "D":
+			for i in range(qtdArestas):
+				a = lista[j]
+				b = lista[j + 1]
+				matriz[i][a] = 1
+				matriz[i][b] = -1
+				j += 2
+
+		#~ # nao-direcionado
+		else:
+			for i in range(qtdArestas):
+				a = lista[j]
+				b = lista[j + 1]
+				matriz[i][a] = 1
+				matriz[i][b] = 1
+				j += 2
 
 	return matriz
 
 # estrutura de dados: lista de adjacencia
-def listaAdjacencia(lista, tipo):
+def listaAdjacencia(lista, tipo, valorado):
 	qtdVertices = getQtdVertices(lista)
 	qtdArestas = getQtdArestas(lista)
 	
-	listaAdjacencia = [0] * qtdVertices
+	if valorado:
+		listaAux = []
+		aux = 0
+		while aux < len(lista):
+			listaAux.append(lista[aux])
+			listaAux.append(lista[aux + 1])
+			aux += 3
+		
+		qtdVertices = max(listaAux) + 1
+		qtdArestas = getQtdArestas(listaAux)
+		
+		print qtdVertices
+		print qtdArestas
+		
+		listaAdjacencia = [0] * qtdVertices
 
-	for lin in range(qtdVertices):
-		listaAdjacencia[lin] = []
+		for lin in range(qtdVertices):
+			listaAdjacencia[lin] = []
+				
+		j = 0
+		# direcionado
+		if tipo[0] == "D":
+			for i in range(qtdArestas):
+				a = lista[j]
+				b = lista[j + 1]
+				listaAdjacencia[a].append([b, lista[j + 2]])
+				#~ listaAdjacencia[a][1].append(lista[j + 2])
+				j += 3
+		
+		# nao-direcionado
+		else:
+			for i in range(qtdArestas):
+				a = lista[j]
+				b = lista[j + 1]
+				listaAdjacencia[a].append([b, lista[j + 2]])
+				listaAdjacencia[b].append([a, lista[j + 2]])
+				j += 3
 
-	j = 0
-	# direcionado
-	if tipo[0] == "D":
-		for i in range(qtdArestas):
-			a = lista[j]
-			b = lista[j + 1]
-			listaAdjacencia[a].append(b)
-			j += 2
-	
-	# nao-direcionado
 	else:
-		for i in range(qtdArestas):
-			a = lista[j]
-			b = lista[j + 1]
-			listaAdjacencia[a].append(b)
-			listaAdjacencia[b].append(a)
-			j += 2
+		listaAdjacencia = [0] * qtdVertices
+
+		for lin in range(qtdVertices):
+			listaAdjacencia[lin] = []
+
+		j = 0
+		# direcionado
+		if tipo[0] == "D":
+			for i in range(qtdArestas):
+				a = lista[j]
+				b = lista[j + 1]
+				listaAdjacencia[a].append(b)
+				j += 2
+		
+		# nao-direcionado
+		else:
+			for i in range(qtdArestas):
+				a = lista[j]
+				b = lista[j + 1]
+				listaAdjacencia[a].append(b)
+				listaAdjacencia[b].append(a)
+				j += 2
 	
 	return listaAdjacencia
 
@@ -220,10 +296,10 @@ def main():
 	if valor[2] != "\n":
 		valorado = True
 	
-	#~ listaAdj = listaAdjacencia(leArquivo(nomeArq), tipo)
-	#~ imprimeListaAdjacencia(listaAdj)
-	#~ matrizInc = matrizIncidencia(leArquivo(nomeArq), tipo)
-	#~ imprimeMatrizIncidencia(matrizInc)
+	listaAdj = listaAdjacencia(leArquivo(nomeArq, valorado), tipo, valorado)
+	imprimeListaAdjacencia(listaAdj)
+	matrizInc = matrizIncidencia(leArquivo(nomeArq, valorado), tipo, valorado)
+	imprimeMatrizIncidencia(matrizInc)
 	matrizAd = matrizAdjacencia(leArquivo(nomeArq, valorado), tipo, valorado)
 	imprimeMatrizAdjacencia(matrizAd)
 	
