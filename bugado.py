@@ -108,12 +108,12 @@ def main():
     
     u = input("u: ")
     aux = []
-    qtdVertices = 5
-    if estrutura[u].count(0) == qtdVertices - 1:
-        for i in range(qtdVertices):
-            if (estrutura[u][i] != 0):
-                aux.append(i)
-    print obtemPred(estrutura, u, aux, u)
+    #~ qtdVertices = 5
+    #~ if estrutura[u].count(0) == qtdVertices - 1:
+        #~ for i in range(qtdVertices):
+            #~ if (estrutura[u][i] != 0):
+                #~ aux.append(i)
+    #~ print obtemPred(estrutura, u, aux, u)
     
     # obtem sucessores
     #~ if tipoEstrutura != "I":

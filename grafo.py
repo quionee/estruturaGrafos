@@ -388,8 +388,8 @@ class Grafo:
 			ehSuc = True
 		return ehSuc
 
+	# deleta vertices e as arestas adjacentes a ele
 	def delVertice(self, matriz, u):
-		arestasExcluir = []
 		i = 0
 		while i < self.qtdArestas:
 			if matriz[i][u] != 0:
@@ -401,4 +401,40 @@ class Grafo:
 		self.qtdVertices = self.qtdVertices - 1
 		return matriz
 
+	# deleta aresta e todos vertices adjacentes a ele
 	def delAresta(self, matriz, u, v):
+		i = 0
+		encontrou = False
+		while i < self.qtdArestas and not(encontrou):
+			if matriz[i][u] != 0 and matriz[i][v] != 0:
+				del matriz[i]
+				self.qtdArestas = self.qtdArestas - 1
+				encontrou = True
+			i += 1
+		return matriz
+
+	# gera subgrafo induzido por vertices
+	def geraSubgrafoIV(self, matriz, lista):
+		tamLista = len(lista)
+		for i in range(tamLista):
+			self.delVertice(matriz, lista[i])
+		
+		return matriz
+		
+	# gera subgrafo induzido por arestas
+	def geraSubgrafoIA(self, matriz, lista):
+		tamLista = len(lista)
+		for i in range(tamLista):
+			self.delAresta(matriz, lista[i][0], lista[i][1])
+		i = 0
+		while i < self.qtdVertices:
+			cont = 0
+			for j in range(self.qtdArestas):
+				if matriz[j][i] == 0:
+					cont += 1
+			if cont == self.qtdArestas:
+				for k in range(self.qtdArestas):
+					del matriz[k][i]
+				self.qtdVertices -= 1
+			i += 1
+		return matriz

@@ -88,7 +88,7 @@ def main():
 			#~ estrutura = convMatIncListAd(estrutura, tipo, valorado)
 		#~ tipoEstrutura = "L"
 	
-	u = int(input("u: "))
+	#~ u = int(input("u: "))
 	#~ v = int(input("v: "))
 	#~ print(grafo.obtemVizinhos(listaAd, u))
 	#~ aux = []
@@ -101,8 +101,9 @@ def main():
 
 	#~ print(grafo.ehSucessor(matrizInc, u, v))
 	
-	matrizInc = grafo.delVertice(matrizInc, u)
+	lisAux = [[1, 2], [3, 0], [7, 5]]
+	matrizInc = grafo.geraSubgrafoIA(matrizInc, lisAux)
 	grafo.imprimeMatrizIncidencia(matrizInc)
-	
+	print(grafo.qtdVertices)
 if __name__ == "__main__":
 	main()
