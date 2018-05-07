@@ -30,20 +30,7 @@ def leArquivo(nomeArq, valorado):
 
 	return lista
 
-def imprimeMatrizAdjacencia(matriz):
-    print("\nMatriz de Adjacencia: \n")
-    for i in range(len(matriz)):
-        print(matriz[i])
 
-def imprimeMatrizIncidencia(matriz):
-    print("\nMatriz de Incidencia: \n")
-    for lin in range(len(matriz)):
-        print(matriz[lin])
-        
-def imprimeListaAdjacencia(lista):
-    print("\nLista de Adjacencias: \n")
-    for i in range(len(lista)):
-        print([i], '->', lista[i])
 
 def main():
 	nomeArq = input()
@@ -67,9 +54,55 @@ def main():
 	print(grafo.qtdArestas)
 	print(grafo.valorado)
 	print(grafo.lista)
-	#~ imprimeMatrizAdjacencia(grafo.matrizAdjacencia())
-	#~ imprimeMatrizIncidencia(grafo.matrizIncidencia())
-	imprimeListaAdjacencia(grafo.listaAdjacencia())
+	#~ matrizAd = grafo.matrizAdjacencia()
+	#~ grafo.imprimeMatrizAdjacencia(matrizAd)
+	#~ grafo.convMatAdList(matrizAd)
+	#~ grafo.convMatAdMatInc()
+	#~ grafo.imprimeMatrizIncidencia(grafo.matrizIncidencia())
+	#~ grafo.convMatAdListAd
+	#~ grafo.imprimeListaAdjacencia(grafo.listaAdjacencia())
+	
+	matrizInc = grafo.matrizIncidencia()
+	grafo.imprimeMatrizIncidencia(matrizInc)
+	# converte matriz de incidencia para lista aux
+	#~ grafo.convMatIncList(matrizInc)
+	#~ isso = grafo.convMatIncMatAd()
+	#~ grafo.imprimeMatrizAdjacencia(isso)
+	#~ isso = grafo.convMatIncListAd()
+	#~ grafo.imprimeListaAdjacencia(isso)
+	
+	#~ listaAd = grafo.listaAdjacencia()
+	#~ grafo.imprimeListaAdjacencia(listaAd)
+	# converte matriz de incidencia para lista aux
+	#~ grafo.convListAdList(listaAd)
+	#~ isso = grafo.convListAdMatAd()
+	#~ grafo.imprimeMatrizAdjacencia(isso)
+	#~ isso = grafo.convListAdMatInc()
+	#~ grafo.imprimeMatrizIncidencia(isso)
+	
+	#~ # obtem vertice
+	#~ if tipoEstrutura != "L":
+		#~ if tipoEstrutura == "A":
+			#~ estrutura = convMatAdListAd(estrutura, tipo, valorado)
+		#~ elif tipoEstrutura == "I":
+			#~ estrutura = convMatIncListAd(estrutura, tipo, valorado)
+		#~ tipoEstrutura = "L"
+	
+	u = int(input("u: "))
+	#~ v = int(input("v: "))
+	#~ print(grafo.obtemVizinhos(listaAd, u))
+	#~ aux = []
+	#~ grafo.obtemSuc(matrizInc, u, aux)
+	#~ print(aux)
+	
+	#~ print(grafo.ehVizinho(matrizAd, u, v))
+	
+	#~ print(grafo.ehPredecessor(matrizInc, u, v))
+
+	#~ print(grafo.ehSucessor(matrizInc, u, v))
+	
+	matrizInc = grafo.delVertice(matrizInc, u)
+	grafo.imprimeMatrizIncidencia(matrizInc)
 	
 if __name__ == "__main__":
 	main()
