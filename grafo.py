@@ -134,8 +134,8 @@ class Grafo:
 			# direcionado
 			if self.tipo == "D":
 				for i in range(self.qtdArestas):
-					a = lista[j]
-					b = lista[j + 1]
+					a = self.lista[j]
+					b = self.lista[j + 1]
 					listaAdjacencia[a].append([b, self.lista[j + 2]])
 					j += 3
 			
@@ -177,17 +177,17 @@ class Grafo:
 	def imprimeMatrizAdjacencia(self, matriz):
 		print("\nMatriz de Adjacencia: \n")
 		for i in range(len(matriz)):
-			print(matriz[i])
+			print matriz[i]
 
 	def imprimeMatrizIncidencia(self, matriz):
 		print("\nMatriz de Incidencia: \n")
 		for lin in range(self.qtdArestas):
-			print(matriz[lin])
+			print matriz[lin]
 			
 	def imprimeListaAdjacencia(self, lista):
 		print("\nLista de Adjacencias: \n")
 		for i in range(len(lista)):
-			print([i], '->', lista[i])
+			print [i], "->", lista[i]
 
 	# converte matriz adjacencia para lista auxiliar
 	def convMatAdList(self, matriz):
@@ -222,15 +222,7 @@ class Grafo:
 							listaAux.append(lin)
 							listaAux.append(col)
 							matriz[col][lin] = 0
-		return listaAux
-
-	# converte matriz de adjancencia para matriz de incidencia
-	def convMatAdMatInc(self):
-		self.matrizIncidencia()
-		
-	# converte matriz de adjacencia para lista de adjacencia
-	def convMatAdListAd(self):
-		self.listaAdjacencia()
+		self.lista = listaAux
 		
 	# converte matriz de incidencia para lista auxiliar
 	def convMatIncList(self, matriz):
@@ -269,15 +261,7 @@ class Grafo:
 						if (matriz[lin][col] == 1):
 							listaAux.append(col)
 		
-		return listaAux
-
-	# converte matriz de incidencia para matriz de adjancencia
-	def convMatIncMatAd(self):
-		return self.matrizAdjacencia()
-		
-	# converte matriz de incidencia para lista de adjancencia
-	def convMatIncListAd(self):
-		return self.listaAdjacencia()
+		self.lista = listaAux
 		
 	# converte lista de adjacencia para lista auxiliar
 	def convListAdList(self, lista):
@@ -316,24 +300,16 @@ class Grafo:
 							listaAux.append(i)
 							listaAux.append(lista[i][j])
 							del lista[lista[i][j]][0]   
-		return listaAux
+		self.lista = listaAux
 
-	# converte lista de adjacencia para matriz de adjancencia
-	def convListAdMatAd(self):
-		return self.matrizAdjacencia()
-		
-	# converte lista de adjancencia para matriz de incidencia
-	def convListAdMatInc(self):
-		return self.matrizIncidencia()
-		
 	# obtem vizinho utilizando lista de adjacencias
 	def obtemVizinhos(self, lista, u):
 		conjuntoVizinhos = []
 		if self.valorado:
 			for i in range(len(lista[u])):
 				conjuntoVizinhos.append(lista[u][i][0])
-			return conjuntoVizinhos
-		return lista[u]
+			print(conjuntoVizinhos)
+		print(lista[u])
 	
 	# obtem predecessores utilizando matriz de incidencia 
 	def obtemPred(self, matriz, u, aux):
@@ -405,12 +381,20 @@ class Grafo:
 	def delAresta(self, matriz, u, v):
 		i = 0
 		encontrou = False
-		while i < self.qtdArestas and not(encontrou):
-			if matriz[i][u] != 0 and matriz[i][v] != 0:
-				del matriz[i]
-				self.qtdArestas = self.qtdArestas - 1
-				encontrou = True
-			i += 1
+		if self.tipo == "D":
+			while i < self.qtdArestas and not(encontrou):
+				if matriz[i][u] > 0 and matriz[i][v] < 0:
+					del matriz[i]
+					self.qtdArestas = self.qtdArestas - 1
+					encontrou = True
+				i += 1
+		else:
+			while i < self.qtdArestas and not(encontrou):
+				if matriz[i][u] != 0 and matriz[i][v] != 0:
+					del matriz[i]
+					self.qtdArestas = self.qtdArestas - 1
+					encontrou = True
+				i += 1
 		return matriz
 
 	# gera subgrafo induzido por vertices
