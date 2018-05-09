@@ -443,20 +443,23 @@ class Grafo:
 		else:
 			if self.valorado:
 				for i in range(len(estrutura[u])):
+					x = estrutura[u][i][0]
+					u = self.verificaU(x)
 					jaExiste = False
-					if any(k == estrutura[u][i][0] for k in aux):
+					if any(k == x for k in aux):
 						jaExiste = True
 					if not(jaExiste):
-						aux.append(estrutura[u][i][0])
-						self.obtemSuc(estrutura, estrutura[u][i][0], aux)
+						aux.append(x)
+						self.obtemSuc(estrutura, u, aux)
 			else:
 				for i in range(len(estrutura[u])):
+					u = self.verificaU(estrutura[u][i])
 					jaExiste = False
-					if any(k == estrutura[u][i] for k in aux):
+					if any(k == u for k in aux):
 						jaExiste = True
 					if not(jaExiste):
 						aux.append(estrutura[u][i])
-						self.obtemSuc(estrutura, estrutura[u][i], aux)
+						self.obtemSuc(estrutura, u, aux)
 		return aux
 
 	# verifica se u e v sao vizinhos
@@ -496,6 +499,9 @@ class Grafo:
 
 	# deleta vertices e as arestas adjacentes a ele utilizando matriz de incidencia
 	def delVertice(self, estrutura, u):
+		for i in range(len(self.listaDeVertices)):
+				if self.listaDeVertices[i] == u:
+					u = i
 		if self.tipoEstrutura == "I":
 			i = 0
 			while i < self.qtdArestas:
@@ -516,15 +522,13 @@ class Grafo:
 			self.qtdVertices -= 1
 			self.qtdArestas -= cont
 		else:
-			print("listaAux: ", self.listaDeVertices)
-			print("estrutura: ", estrutura[u])
 			del estrutura[u]
 			self.qtdVertices -= 1
 			if self.valorado:
 				for i in range(self.qtdVertices):
 					j = 0
 					while j < len(estrutura[i]):
-						if estrutura[i][j][0] == u:
+						if estrutura[i][j][0] == self.listaDeVertices[u]:
 							del estrutura[i][j]
 							self.qtdArestas -= 1
 						j += 1
@@ -532,10 +536,9 @@ class Grafo:
 				for i in range(self.qtdVertices):
 					j = 0
 					while j < len(estrutura[i]):
-						if estrutura[i][j] == u:
+						if estrutura[i][j] == self.listaDeVertices[u]:
 							del estrutura[i][j]
 						j += 1
-		print("u: ", u)
 		del self.listaDeVertices[u]
 		return estrutura
 
@@ -609,8 +612,11 @@ class Grafo:
 		estrutura = self.delVertice(estrutura, lista[0])
 		i = 1
 		while i < tamLista:
-			print(lista[i])
-			estrutura = self.delVertice(estrutura, lista[i]-1)
+			j = i
+			while j < tamLista:
+				lista[j] = lista[j]-1
+				j = j+1
+			estrutura = self.delVertice(estrutura, lista[i])
 			i += 1
 		return estrutura
 		
@@ -631,3 +637,8 @@ class Grafo:
 				self.qtdVertices -= 1
 			i += 1
 		return matriz
+	def verificaU(self,u):
+		for i in range(len(self.listaDeVertices)):
+			if self.listaDeVertices[i] == u:
+				u = i
+		return u
