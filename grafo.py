@@ -8,6 +8,9 @@ class Grafo:
 		self.qtdArestas = qtdArestas
 		self.lista = lista
 		self.tipoEstrutura = tipoEstrutura
+		self.listaDeVertices = [0] * self.qtdVertices
+		for i in range(self.qtdVertices):
+			self.listaDeVertices[i] = i
 		
 	# estrutura de dado: matriz de adjacencia
 	def matrizAdjacencia(self):
@@ -188,8 +191,8 @@ class Grafo:
 	def imprimeListaAdjacencia(self, lista):
 		print("\nLista de Adjacencias: \n")
 		for i in range(len(lista)):
-			print([i], "->", lista[i])
-
+			print(self.listaDeVertices[i], "->", lista[i])
+			
 	# converte matriz adjacencia para lista auxiliar
 	def convMatAdList(self, matriz):
 		listaAux = []
@@ -457,62 +460,125 @@ class Grafo:
 		return aux
 
 	# verifica se u e v sao vizinhos
-	def ehVizinho(self, matriz, u, v):
+	def ehVizinho(self, estrutura, u, v):
 		ehViz = False
-		if matriz[u][v] != 0 or matriz[v][u] != 0:
-			ehViz = True
+		if self.tipoEstrutura == "A":
+			if self.tipo == "D":
+				if estrutura[u][v] != 0:
+					ehViz = True
+			else:
+				if estrutura[u][v] != 0 or estrutura[v][u] != 0:
+					ehViz = True
+		elif self.tipoEstrutura == "I":
+			listaAux = self.obtemVizinhos(estrutura,u)
+			for i in range(len(listaAux)):
+				if listaAux[i] == v:
+					ehviz = True
 		return ehViz
 	
 	# verifica se v eh predecessor de u utilizando obtemPred
-	def ehPredecessor(self, matriz, u, v):
+	def ehPredecessor(self, estrutura, u, v):
 		lisAux = []
-		lisAux = self.obtemPred(matriz, u, lisAux)
+		lisAux = self.obtemPred(estrutura, u, lisAux)
 		ehPred = False
 		if any(i == v for i in lisAux):
 			ehPred = True
 		return ehPred
 
 	# verifica se v eh sucessor de u utilizando obtemSuc
-	def ehSucessor(self, matriz, u, v):
+	def ehSucessor(self, estrutura, u, v):
 		lisAux = []
-		lisAux = self.obtemSuc(matriz, u, lisAux)
+		lisAux = self.obtemSuc(estrutura, u, lisAux)
 		ehSuc = False
 		if any(i == v for i in lisAux):
 			ehSuc = True
 		return ehSuc
 
 	# deleta vertices e as arestas adjacentes a ele utilizando matriz de incidencia
-	def delVertice(self, matriz, u):
-		i = 0
-		while i < self.qtdArestas:
-			if matriz[i][u] != 0:
-				del matriz[i]
-				self.qtdArestas = self.qtdArestas - 1
+	def delVertice(self, estrutura, u):
+		if self.tipoEstrutura == "I":
+			i = 0
+			while i < self.qtdArestas:
+				if estrutura[i][u] != 0:
+					del estrutura[i]
+					self.qtdArestas = self.qtdArestas - 1
+				else:
+					del estrutura[i][u]
+					i += 1
+			self.qtdVertices = self.qtdVertices - 1
+		elif self.tipoEstrutura == "A":
+			cont = 0
+			for i in range(self.qtdVertices):
+				if estrutura[i][u] != 0:
+					cont += 1
+				del estrutura[i][u]
+			del estrutura[u]
+			self.qtdVertices -= 1
+			self.qtdArestas -= cont
+		else:
+			del estrutura[u]
+			self.qtdVertices -= 1
+			if self.valorado:
+				for i in range(self.qtdVertices):
+					j = 0
+					while j < len(estrutura[i]):
+						if estrutura[i][j][0] == u:
+							del estrutura[i][j]
+							self.qtdArestas -= 1
+						j += 1
 			else:
-				del matriz[i][u]
-				i += 1
-		self.qtdVertices = self.qtdVertices - 1
-		return matriz
+				for i in range(self.qtdVertices):
+					j = 0
+					while j < len(estrutura[i]):
+						if estrutura[i][j] == u:
+							del estrutura[i][j]
+						j += 1
+		del self.listaDeVertices[u]
+		return estrutura
 
 	# deleta aresta e todos vertices adjacentes a ele
-	def delAresta(self, matriz, u, v):
-		i = 0
-		encontrou = False
-		if self.tipo == "D":
-			while i < self.qtdArestas and not(encontrou):
-				if matriz[i][u] > 0 and matriz[i][v] < 0:
-					del matriz[i]
-					self.qtdArestas = self.qtdArestas - 1
-					encontrou = True
-				i += 1
+	def delAresta(self, estrutura, u, v):
+		if self.tipoEstrutura == "I":
+			i = 0
+			encontrou = False
+			if self.tipo == "D":
+				while i < self.qtdArestas and not(encontrou):
+					if estrutura[i][u] > 0 and estrutura[i][v] < 0:
+						del estrutura[i]
+						self.qtdArestas = self.qtdArestas - 1
+						encontrou = True
+					i += 1
+			else:
+				while i < self.qtdArestas and not(encontrou):
+					if estrutura[i][u] != 0 and estrutura[i][v] != 0:
+						del estrutura[i]
+						self.qtdArestas = self.qtdArestas - 1
+						encontrou = True
+					i += 1
+		elif self.tipoEstrutura == "A":
+			if self.tipo == "D":
+				estrutura[u][v] = 0
+			else:
+				estrutura[u][v] = 0
+				estrutura[v][u] = 0
+			self.qtdArestas -= 1
 		else:
-			while i < self.qtdArestas and not(encontrou):
-				if matriz[i][u] != 0 and matriz[i][v] != 0:
-					del matriz[i]
-					self.qtdArestas = self.qtdArestas - 1
-					encontrou = True
-				i += 1
-		return matriz
+			if self.valorado:
+				for i in range(self.qtdVertices):
+					j = 0
+					while j < len(estrutura[i]):
+						if estrutura[i][j][0] == u:
+							del estrutura[i][j]
+							self.qtdArestas -= 1
+						j += 1
+			else:
+				for i in range(self.qtdVertices):
+					j = 0
+					while j < len(estrutura[i]):
+						if estrutura[i][j] == u:
+							del estrutura[i][j]
+						j += 1
+		return estrutura
 
 	# gera subgrafo induzido por vertices
 	def geraSubgrafoIV(self, matriz, lista):

@@ -64,37 +64,37 @@ def main():
         estrutura = grafo.listaAdjacencia()
         grafo.imprimeListaAdjacencia(estrutura)
     
-    u = int(input("u: "))
+    #~ u = int(input("u: "))
     #~ grafo.obtemVizinhos(estrutura, u)
-    aux = []
+    #~ aux = []
     #~ print(grafo.obtemPred(estrutura, u, aux))
-    print(grafo.obtemSuc(estrutura, u, aux))
+    #~ print(grafo.obtemSuc(estrutura, u, aux))
 
-    #~ menu = True
-    #~ print('''--> Escolha uma acao, digite:
-    #~ -1 para obter vizinhos de u
-    #~ -2 para obter predecessores de u
-    #~ -3 para obter sucessores de u
-    #~ -4 para verificar se u e v sao vizinhos
-    #~ -5 para verificar se v eh predecessor de u
-    #~ -6 para verificar se v eh sucessor de u
-    #~ -7 para deletar um vertice u
-    #~ -8 para deletar uma aresta u v
-    #~ -9 para gerar um subgrafo induzido por vertices
-    #~ -10 para gerar um suggrafo induzido por arestas
-    #~ -11 para imprimir o grafo na estrutura atual
-    #~ -SAIR para encerrar o programa''')
+    menu = True
+    print('''--> Escolha uma acao, digite:
+    -1 para obter vizinhos de u
+    -2 para obter predecessores de u
+    -3 para obter sucessores de u
+    -4 para verificar se u e v sao vizinhos
+    -5 para verificar se v eh predecessor de u
+    -6 para verificar se v eh sucessor de u
+    -7 para deletar um vertice u
+    -8 para deletar uma aresta u v
+    -9 para gerar um subgrafo induzido por vertices
+    -10 para gerar um suggrafo induzido por arestas
+    -11 para imprimir o grafo na estrutura atual
+    -SAIR para encerrar o programa''')
 
     while menu:
         opcao = int(input("Sua escolha eh: "))
-        obtem vizinhos de u
+        #~ obtem vizinhos de u
         if opcao == 1:
             u = int(input("\tu: "))
             if u >= 0 and u < grafo.qtdVertices:
                 grafo.obtemVizinhos(estrutura, u)
             else:
                 print("Vertice invalido")
-        obtem predecessores
+        #~ obtem predecessores
         if opcao == 2:
             u = int(input("u: "))
             if u >= 0 and u < grafo.qtdVertices:
@@ -102,7 +102,7 @@ def main():
                 print(grafo.obtemPred(estrutura, u, aux))
             else:
                 print("Vertice invalido")
-        obtem sucessores
+        #~ obtem sucessores
         if opcao == 3:
             u = int(input("u: "))
             if u >= 0 and u < grafo.qtdVertices:
@@ -110,7 +110,7 @@ def main():
                 print(grafo.obtemSuc(estrutura, u, aux))
             else:
                 print("Vertice invalido")
-        verifica se u e v sao vizinhos
+        #~ verifica se u e v sao vizinhos
         if opcao == 4:
             u = int(input("u: "))
             v = int(input("v: "))
@@ -121,7 +121,7 @@ def main():
                     print("u e v nao sao vizinhos")
             else:
                 print("Algum vertice invalido")
-        verifica se v eh predecessor de u
+        #~ verifica se v eh predecessor de u
         if opcao == 5:
             u = int(input("u: "))
             v = int(input("v: "))
@@ -132,7 +132,7 @@ def main():
                     print("v nao eh predecessor de u")
             else:
                 print("Algum vertice invalido")
-        verifica se v eh sucessor de u
+        #~ verifica se v eh sucessor de u
         if opcao == 6:
             u = int(input("u: "))
             v = int(input("v: "))
@@ -143,14 +143,14 @@ def main():
                     print("v nao eh sucessor de u")
             else:
                 print("Algum vertice invalido")
-        deleta o vertice u
+        #~ deleta o vertice u
         if opcao == 7:
             u = int(input("u: "))
-            if u >= 0 and u < grafo.qtdVertices
+            if u >= 0 and u < grafo.qtdVertices:
                 grafo.delVertice(estrutura, u)
             else:
                 print("Vertice invalido")
-        deleta a aresta u v
+        #~ deleta a aresta u v
         if opcao == 8:
             u = int(input("u: "))
             v = int(input("v: "))
@@ -158,7 +158,7 @@ def main():
                 grafo.delAresta(estrutura, u, v)
             else:
                 print("Algum vertice invalido")
-        gera um subgrafo induzido por vertices
+        #~ gera um subgrafo induzido por vertices
         if opcao == 9:
             tamLista = int(input("Quantidade de vertices a serem retirados: "))
             lista = [0] * tamLista
@@ -172,7 +172,7 @@ def main():
                 print("Algum vertice invalido")
             else:
                 grafo.geraSubgrafoIV(estrutura, lista)
-        gera um suggrafo induzido por arestas
+        #~ gera um suggrafo induzido por arestas
         if opcao == 10:
             tamLista = int(input("Quantidade de arestas a serem retiradas: "))
             lista = []
