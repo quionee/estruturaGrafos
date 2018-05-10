@@ -1,5 +1,5 @@
 
-from grafo import Grafo
+from grafoTeste import Grafo
 			
 def leArquivo(nomeArq, valorado):
 	arquivo = open(nomeArq)
@@ -31,7 +31,7 @@ def leArquivo(nomeArq, valorado):
 	return lista
 
 def main():
-	nomeArq = input("Nome do arquivo: ")
+	nomeArq = raw_input("Nome do arquivo: ")
 	arquivo = open(nomeArq)
 	
 	if nomeArq.split('_')[2][:1] == "u":
@@ -50,7 +50,7 @@ def main():
 	while arquivo.readline():
 		qtdArestas += 1
 		
-	tipoEstrutura = input("Tipo de estrutura: ")
+	tipoEstrutura = raw_input("Tipo de estrutura: ")
 	lista = leArquivo(nomeArq, valorado)
 	grafo = Grafo(tipo, valorado, nomeArq, qtdArestas, lista, tipoEstrutura);
 	
@@ -188,6 +188,7 @@ def main():
 			invalido = False
 			for i in range(tamLista):
 				u = int(input())
+	
 				v = int(input())
 				lista.append([u, v])
 				print(lista)

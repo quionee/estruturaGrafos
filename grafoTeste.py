@@ -186,7 +186,7 @@ class Grafo:
 	def imprimeMatrizIncidencia(self, matriz):
 		print("\nMatriz de Incidencia: \n")
 		for lin in range(self.qtdArestas):
-			print(matriz[lin])
+			print(lin, matriz[lin])
 			
 	def imprimeListaAdjacencia(self, lista):
 		print("\nLista de Adjacencias: \n")
@@ -442,23 +442,24 @@ class Grafo:
 							self.obtemSuc(estrutura, i, aux)
 		else:
 			if self.valorado:
+				x = u
 				for i in range(len(estrutura[u])):
-					x = estrutura[u][i][0]
-					u = self.verificaU(x)
+					u = self.verificaU(estrutura[x][i][0])
 					jaExiste = False
-					if any(k == x for k in aux):
+					if any(k == estrutura[x][i][0] for k in aux):
 						jaExiste = True
 					if not(jaExiste):
-						aux.append(x)
+						aux.append(estrutura[x][i][0])
 						self.obtemSuc(estrutura, u, aux)
 			else:
+				x = u
 				for i in range(len(estrutura[u])):
-					u = self.verificaU(estrutura[u][i])
+					u = self.verificaU(estrutura[x][i])
 					jaExiste = False
-					if any(k == u for k in aux):
+					if any(k == estrutura[x][i] for k in aux):
 						jaExiste = True
 					if not(jaExiste):
-						aux.append(estrutura[u][i])
+						aux.append(estrutura[x][i])
 						self.obtemSuc(estrutura, u, aux)
 		return aux
 
@@ -499,9 +500,6 @@ class Grafo:
 
 	# deleta vertices e as arestas adjacentes a ele utilizando matriz de incidencia
 	def delVertice(self, estrutura, u):
-		for i in range(len(self.listaDeVertices)):
-				if self.listaDeVertices[i] == u:
-					u = i
 		if self.tipoEstrutura == "I":
 			i = 0
 			while i < self.qtdArestas:
