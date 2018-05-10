@@ -349,7 +349,8 @@ class Grafo:
 		elif self.tipoEstrutura == "A":
 			for i in range(self.qtdVertices):
 				if estrutura[u][i] != 0:
-					conjuntoVizinhos.append(i)
+					valor = self.listaDeVertices[i]
+					conjuntoVizinhos.append(valor)
 			print(conjuntoVizinhos)
 		else:
 			for i in range(self.qtdArestas):

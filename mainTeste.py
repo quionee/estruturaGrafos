@@ -1,6 +1,6 @@
 
 from grafoTeste import Grafo
-            
+
 def leArquivo(nomeArq, valorado):
     arquivo = open(nomeArq)
     tipo = arquivo.readline()
@@ -33,27 +33,27 @@ def leArquivo(nomeArq, valorado):
 def main():
     nomeArq = raw_input("Nome do arquivo: ")
     arquivo = open(nomeArq)
-    
+
     if nomeArq.split('_')[2][:1] == "u":
         valorado = False
     else:
         valorado = True
-    
+
     tipo = arquivo.readline()
-    
+
     print('''--> Escolha sua forma de armazenamento do grafo:
     -Digite A para Matriz de Adjacencia
     -Digite I para Matriz de Incidencia
     -Digite L para Lista de Adjacencia''')
-    
+
     qtdArestas = 0
     while arquivo.readline():
         qtdArestas += 1
-        
+
     tipoEstrutura = raw_input("Tipo de estrutura: ")
     lista = leArquivo(nomeArq, valorado)
     grafo = Grafo(tipo, valorado, nomeArq, qtdArestas, lista, tipoEstrutura);
-    
+
     if grafo.tipoEstrutura == "A":
         estrutura = grafo.matrizAdjacencia()
         grafo.imprimeMatrizAdjacencia(estrutura)
@@ -63,7 +63,7 @@ def main():
     elif grafo.tipoEstrutura == "L":
         estrutura = grafo.listaAdjacencia()
         grafo.imprimeListaAdjacencia(estrutura)
-    
+
     #~ u = int(input("u: "))
     #~ grafo.obtemVizinhos(estrutura, u)
     #~ aux = []
@@ -92,7 +92,7 @@ def main():
             u = int(input("\tu: "))
             u = grafo.verificaU(u)
             if u >= 0 and u < grafo.qtdVertices:
-				grafo.obtemVizinhos(estrutura, u)
+                grafo.obtemVizinhos(estrutura, u)
             else:
                 print("Vertice invalido")
         #~ obtem predecessores
@@ -100,28 +100,28 @@ def main():
             u = int(input("u: "))
             u = grafo.verificaU(u)
             if u >= 0 and u < grafo.qtdVertices:
-				aux = []
-				print(grafo.obtemPred(estrutura, u, aux))
+                aux = []
+                print(grafo.obtemPred(estrutura, u, aux))
             else:
                 print("Vertice invalido")
         #~ obtem sucessores
         if opcao == 3:
             u = int(input("u: "))
-            if u >= 0 and u < grafo.qtdVertices:
-				aux = []
-				print(grafo.obtemSuc(estrutura, u, aux))
-            else:
-                print("Vertice invalido")
+            #~ if u >= 0 and u < grafo.qtdVertices:
+            aux = []
+            print(grafo.obtemSuc(estrutura, u, aux))
+            #~ else:
+                #~ print("Vertice invalido")
         #~ verifica se u e v sao vizinhos
         if opcao == 4:
             u = int(input("u: "))
             v = int(input("v: "))
             u = grafo.verificaU(u)
             if u >= 0 and u < grafo.qtdVertices and v >= 0 and v < grafo.qtdVertices:
-				if grafo.ehVizinho(estrutura, u, v):
-					print("u e v sao vizinhos")
-				else:
-					print("u e v nao sao vizinhos")
+                if grafo.ehVizinho(estrutura, u, v):
+                    print("u e v sao vizinhos")
+                else:
+                    print("u e v nao sao vizinhos")
             else:
                 print("Algum vertice invalido")
         #~ verifica se v eh predecessor de u
@@ -130,10 +130,10 @@ def main():
             v = int(input("v: "))
             u = grafo.verificaU(u)
             if u >= 0 and u < grafo.qtdVertices and v >= 0 and v < grafo.qtdVertices:
-				if grafo.ehPredecessor(estrutura, u, v):
-					print("v eh predecessor de u")
-				else:
-					print("v nao eh predecessor de u")
+                if grafo.ehPredecessor(estrutura, u, v):
+                    print("v eh predecessor de u")
+                else:
+                    print("v nao eh predecessor de u")
             else:
                 print("Algum vertice invalido")
         #~ verifica se v eh sucessor de u
@@ -141,10 +141,10 @@ def main():
             u = int(input("u: "))
             v = int(input("v: "))
             if u >= 0 and u < grafo.qtdVertices and v >= 0 and v < grafo.qtdVertices:
-				if grafo.ehSucessor(estrutura, u, v):
-					print("v eh sucessor de u")
-				else:
-					print("v nao eh sucessor de u")
+                if grafo.ehSucessor(estrutura, u, v):
+                    print("v eh sucessor de u")
+                else:
+                    print("v nao eh sucessor de u")
             else:
                 print("Algum vertice invalido")
         #~ deleta o vertice u
@@ -152,7 +152,7 @@ def main():
             u = int(input("u: "))
             u = grafo.verificaU(u)
             if u >= 0 and u < grafo.qtdVertices:
-				grafo.delVertice(estrutura, u)
+                grafo.delVertice(estrutura, u)
             else:
                 print("Vertice invalido")
         #~ deleta a aresta u v
@@ -162,7 +162,7 @@ def main():
             u = grafo.verificaU(u)
             v = grafo.verificaU(v)
             if u >= 0 and u < grafo.qtdVertices and v >= 0 and v < grafo.qtdVertices:
-				grafo.delAresta(estrutura, u, v)
+                grafo.delAresta(estrutura, u, v)
             else:
                 print("Algum vertice invalido")
         #~ gera um subgrafo induzido por vertices
@@ -186,7 +186,7 @@ def main():
             invalido = False
             for i in range(tamLista):
                 u = int(input())
-    
+
                 v = int(input())
                 lista.append([u, v])
                 print(lista)
@@ -205,26 +205,26 @@ def main():
                 grafo.imprimeListaAdjacencia(estrutura)
         if opcao == "SAIR":
             menu = False
-    
+
     #~ grafo.convMatAdList(matrizAd)
     #~ grafo.convMatAdMatInc()
     #~ grafo.imprimeMatrizIncidencia(grafo.matrizIncidencia())
     #~ grafo.convMatAdListAd
     #~ grafo.imprimeListaAdjacencia(grafo.listaAdjacencia())
-    
+
 
     #~ grafo.convMatIncList(matrizInc)
     #~ isso = grafo.convMatIncMatAd()
     #~ grafo.imprimeMatrizAdjacencia(isso)
     #~ isso = grafo.convMatIncListAd()
     #~ grafo.imprimeListaAdjacencia(isso)
-    
+
     #~ grafo.convListAdList(listaAd)
     #~ isso = grafo.convListAdMatAd()
     #~ grafo.imprimeMatrizAdjacencia(isso)
     #~ isso = grafo.convListAdMatInc()
     #~ grafo.imprimeMatrizIncidencia(isso)
-    
+
     #~ # obtem vertice
     #~ if tipoEstrutura != "L":
         #~ if tipoEstrutura == "A":
@@ -232,20 +232,20 @@ def main():
         #~ elif tipoEstrutura == "I":
             #~ estrutura = convMatIncListAd(estrutura, tipo, valorado)
         #~ tipoEstrutura = "L"
-    
+
     #~ u = int(input("u: "))
     #~ v = int(input("v: "))
     #~ print(grafo.obtemVizinhos(listaAd, u))
     #~ aux = []
     #~ grafo.obtemSuc(matrizInc, u, aux)
     #~ print(aux)
-    
+
     #~ print(grafo.ehVizinho(matrizAd, u, v))
-    
+
     #~ print(grafo.ehPredecessor(matrizInc, u, v))
 
     #~ print(grafo.ehSucessor(matrizInc, u, v))
-    
+
     #~ lisAux = [[1, 2], [3, 0], [7, 5]]
     #~ matrizInc = grafo.geraSubgrafoIA(matrizInc, lisAux)
     #~ grafo.imprimeMatrizIncidencia(matrizInc)
