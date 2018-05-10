@@ -91,65 +91,62 @@ def main():
         if opcao == 1:
             u = int(input("\tu: "))
             u = grafo.verificaU(u)
-            #~ if u >= 0 and u < grafo.qtdVertices:
-            grafo.obtemVizinhos(estrutura, u)
-            #~ else:
-                #~ print("Vertice invalido")
+            if u >= 0 and u < grafo.qtdVertices:
+				grafo.obtemVizinhos(estrutura, u)
+            else:
+                print("Vertice invalido")
         #~ obtem predecessores
         if opcao == 2:
             u = int(input("u: "))
             u = grafo.verificaU(u)
-            #~ if u >= 0 and u < grafo.qtdVertices:
-            aux = []
-            print(grafo.obtemPred(estrutura, u, aux))
-            #~ else:
-                #~ print("Vertice invalido")
+            if u >= 0 and u < grafo.qtdVertices:
+				aux = []
+				print(grafo.obtemPred(estrutura, u, aux))
+            else:
+                print("Vertice invalido")
         #~ obtem sucessores
         if opcao == 3:
             u = int(input("u: "))
-            print(u)
-            u = grafo.verificaU(u)
-            print(u)
-            #~ if u >= 0 and u < grafo.qtdVertices:
-            aux = []
-            print(grafo.obtemSuc(estrutura, u, aux))
-            #~ else:
-                #~ print("Vertice invalido")
+            if u >= 0 and u < grafo.qtdVertices:
+				aux = []
+				print(grafo.obtemSuc(estrutura, u, aux))
+            else:
+                print("Vertice invalido")
         #~ verifica se u e v sao vizinhos
         if opcao == 4:
             u = int(input("u: "))
             v = int(input("v: "))
             u = grafo.verificaU(u)
-            #~ if u >= 0 and u < grafo.qtdVertices and v >= 0 and v < grafo.qtdVertices:
-            if grafo.ehVizinho(estrutura, u, v):
-                print("u e v sao vizinhos")
+            if u >= 0 and u < grafo.qtdVertices and v >= 0 and v < grafo.qtdVertices:
+				if grafo.ehVizinho(estrutura, u, v):
+					print("u e v sao vizinhos")
+				else:
+					print("u e v nao sao vizinhos")
             else:
-                print("u e v nao sao vizinhos")
-            #~ else:
-                #~ print("Algum vertice invalido")
+                print("Algum vertice invalido")
         #~ verifica se v eh predecessor de u
         if opcao == 5:
             u = int(input("u: "))
             v = int(input("v: "))
             u = grafo.verificaU(u)
-            #~ if u >= 0 and u < grafo.qtdVertices and v >= 0 and v < grafo.qtdVertices:
-            if grafo.ehPredecessor(estrutura, u, v):
-                print("v eh predecessor de u")
+            if u >= 0 and u < grafo.qtdVertices and v >= 0 and v < grafo.qtdVertices:
+				if grafo.ehPredecessor(estrutura, u, v):
+					print("v eh predecessor de u")
+				else:
+					print("v nao eh predecessor de u")
             else:
-                print("v nao eh predecessor de u")
-            #~ else:
-                #~ print("Algum vertice invalido")
+                print("Algum vertice invalido")
         #~ verifica se v eh sucessor de u
         if opcao == 6:
             u = int(input("u: "))
             v = int(input("v: "))
-            #~ if u >= 0 and u < grafo.qtdVertices and v >= 0 and v < grafo.qtdVertices:
-            if grafo.ehSucessor(estrutura, u, v):
-                print("v eh sucessor de u")
+            if u >= 0 and u < grafo.qtdVertices and v >= 0 and v < grafo.qtdVertices:
+				if grafo.ehSucessor(estrutura, u, v):
+					print("v eh sucessor de u")
+				else:
+					print("v nao eh sucessor de u")
             else:
-                print("v nao eh sucessor de u")
-            #~ else:
-                #~ print("Algum vertice invalido")
+                print("Algum vertice invalido")
         #~ deleta o vertice u
         if opcao == 7:
             u = int(input("u: "))
