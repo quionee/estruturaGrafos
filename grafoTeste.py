@@ -494,6 +494,7 @@ class Grafo:
 
 	# deleta vertices e as arestas adjacentes a ele utilizando matriz de incidencia
 	def delVertice(self, estrutura, u):
+		print("u: ", u)
 		if self.tipoEstrutura == "I":
 			i = 0
 			while i < self.qtdArestas:
@@ -546,6 +547,8 @@ class Grafo:
 						self.qtdArestas = self.qtdArestas - 1
 						encontrou = True
 					i += 1
+				if not(encontrou):
+					print("\nAresta invalida\n'''''")
 			else:
 				while i < self.qtdArestas and not(encontrou):
 					if estrutura[i][u] != 0 and estrutura[i][v] != 0:
@@ -555,7 +558,10 @@ class Grafo:
 					i += 1
 		elif self.tipoEstrutura == "A":
 			if self.tipo == "D":
-				estrutura[u][v] = 0
+				if estrutura[u][v] == 0:
+					print("\nAresta invalida\n")
+				else:
+					estrutura[u][v] = 0
 			else:
 				estrutura[u][v] = 0
 				estrutura[v][u] = 0
@@ -573,66 +579,88 @@ class Grafo:
 					while j < len(estrutura[u]) and not(encontrou):
 						if estrutura[u][j] == v:
 							del estrutura[u][j]
+							encontrou = True
 						j += 1
 			else:
 				if self.valorado:
 					while j < len(estrutura[u]) and not(encontrou):
 						if estrutura[u][j][0] == v:
 							del estrutura[u][j]
+							encontrou = True
 						j += 1
 					j = 0
 					while j < len(estrutura[v]) and not(encontrou):
 						if estrutura[v][j][0] == u:
 							del estrutura[v][j]
+							encontrou = True
 						j += 1
 				else:
 					while j < len(estrutura[u]) and not(encontrou):
 						if estrutura[u][j] == v:
 							del estrutura[u][j]
+							encontrou = True
 						j += 1
 					j = 0
 					while j < len(estrutura[v]) and not(encontrou):
 						if estrutura[v][j] == v:
 							del estrutura[v][j]
+							encontrou = True
 						j += 1
 		self.qtdArestas -= 1
 		return estrutura
 
 	# gera subgrafo induzido por vertices
 	def geraSubgrafoIV(self, estrutura, lista):
-		tamLista = len(lista)
-		estrutura = self.delVertice(estrutura, lista[0])
-		i = 1
-		while i < tamLista:
-			j = i
-			while j < tamLista:
-				lista[j] = lista[j]-1
-				j = j+1
-			estrutura = self.delVertice(estrutura, lista[i])
-			i += 1
+		for i in range(len(lista)):
+			u = self.verificaU(lista[i])
+			self.delVertice(estrutura, u)
 		return estrutura
-		
+
 	# gera subgrafo induzido por arestas
 	def geraSubgrafoIA(self, estrutura, lista):
 		tamLista = len(lista)
-		for i in range(tamLista):
-			self.delAresta(estrutura, lista[i][0], lista[i][1])
-		i = 0
-		while i < self.qtdVertices:
-			cont = 0
-			for j in range(self.qtdArestas):
-				if estrutura[j][i] == 0:
-					cont += 1
-			if cont == self.qtdArestas:
-				for k in range(self.qtdArestas):
-					del estrutura[k][i]
-				self.qtdVertices -= 1
-			i += 1
+		for h in range(tamLista):
+			u = self.verificaU(lista[h][0])
+			v = self.verificaU(lista[h][1])
+			print(u, v)
+			self.delAresta(estrutura, u, v)
+			if self.tipoEstrutura == "A":
+				i = 0
+				while i < self.qtdVertices:
+					print("CHEGUEI")
+					if estrutura[i].count(0) == self.qtdVertices:
+						print("VAMO VER")
+						cont = 0
+						for j in range(self.qtdVertices):
+							if estrutura[j][i] != 0:
+								cont += 1
+						if cont == 0:
+							self.delVertice(estrutura, i)
+					i += 1
+		#~ elif self.tipoEstrutura == "L":
+		
+		#~ else:
+			#~ i = 0
+			#~ while i < self.qtdVertices:
+				#~ cont = 0
+				#~ for j in range(self.qtdArestas):
+					#~ if estrutura[j][i] == 0:
+						#~ cont += 1
+				#~ if cont == self.qtdArestas:
+					#~ for k in range(self.qtdArestas):
+						#~ del estrutura[k][i]
+					#~ self.qtdVertices -= 1
+				#~ i += 1
 		return estrutura
-	
+
 	# verifica se u pertence a lista de vertices
-	def verificaU(self,u):
+	def verificaU(self, u):
+		existe = False
 		for i in range(len(self.listaDeVertices)):
 			if self.listaDeVertices[i] == u:
 				u = i
-		return u
+				existe = True
+		if existe:
+			return u
+		else:
+			return u * 10000
