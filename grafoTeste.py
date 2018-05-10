@@ -367,40 +367,44 @@ class Grafo:
 					for j in range(self.qtdVertices):
 						if estrutura[i][j] > 0:
 							jaExiste = False
-							if any(k == j for k in aux):
+							valor = self.listaDeVertices[j]
+							if any(k == valor for k in aux):
 								jaExiste = True
 							if not(jaExiste):
-								aux.append(j)
+								aux.append(valor)
 								self.obtemPred(estrutura, j, aux)
 		elif self.tipoEstrutura == "A":
 			for i in range(self.qtdVertices):
 				if estrutura[i][u] != 0:
 					jaExiste = False
-					if any(k == i for k in aux):
+					valor = self.listaDeVertices[i]
+					if any(k == valor for k in aux):
 						jaExiste = True
 					if not(jaExiste):
-						aux.append(i)
+						aux.append(valor)
 						self.obtemPred(estrutura, i, aux)
 		else:
 			if self.valorado:
 				for i in range(self.qtdVertices):
 					for j in range(len(estrutura[i])):
 						if estrutura[i][j][0] == u:
+							valor = self.listaDeVertices[i]
 							jaExiste = False
-							if any(k == i for k in aux):
+							if any(k == valor for k in aux):
 								jaExiste = True
 							if not(jaExiste):
-								aux.append(i)
+								aux.append(valor)
 								self.obtemPred(estrutura, i, aux)
 			else:
 				for i in range(self.qtdVertices):
 					for j in range(len(estrutura[i])):
 						if estrutura[i][j] == u:
+							valor = self.listaDeVertices[i]
 							jaExiste = False
-							if any(k == i for k in aux):
+							if any(k == valor for k in aux):
 								jaExiste = True
 							if not(jaExiste):
-								aux.append(i)
+								aux.append(valor)
 								self.obtemPred(estrutura, i, aux)
 		return aux
 
@@ -409,37 +413,25 @@ class Grafo:
 		if self.tipoEstrutura == "I":
 			for i in range(self.qtdArestas):
 				if estrutura[i][u] > 0:
-					if estrutura[i].count(0) == self.qtdVertices - 1:
-						jaExiste = False
-						if any(k == u for k in aux):
-							jaExiste = True
-						if not(jaExiste):
-							aux.append(u)
-					else:
-						for j in range(self.qtdVertices):
-							if estrutura[i][j] < 0:
-								jaExiste = False
-								if any(k == j for k in aux):
-									jaExiste = True
-								if not(jaExiste):
-									aux.append(j)
-									self.obtemSuc(estrutura, j, aux)
-		if self.tipoEstrutura == "A":
-			if estrutura[u].count(0) == self.qtdVertices - 1:
-				jaExiste = False
-				if any(k == u for k in aux):
-					jaExiste = True
-				if not(jaExiste):
-					aux.append(u)
-			else:
-				for i in range(self.qtdVertices):
-					if estrutura[u][i] != 0:
-						jaExiste = False
-						if any(k == i for k in aux):
-							jaExiste = True
-						if not(jaExiste):
-							aux.append(i)
-							self.obtemSuc(estrutura, i, aux)
+					for j in range(self.qtdVertices):
+						if estrutura[i][j] < 0:
+							jaExiste = False
+							valor = self.listaDeVertices[j]
+							if any(k == valor for k in aux):
+								jaExiste = True
+							if not(jaExiste):
+								aux.append(valor)
+								self.obtemSuc(estrutura, j, aux)
+		elif self.tipoEstrutura == "A":
+			for i in range(self.qtdVertices):
+				if estrutura[u][i] != 0:
+					jaExiste = False
+					valor = self.listaDeVertices[i]
+					if any(k == valor for k in aux):
+						jaExiste = True
+					if not(jaExiste):
+						aux.append(valor)
+						self.obtemSuc(estrutura, i, aux)
 		else:
 			if self.valorado:
 				x = u
@@ -467,6 +459,7 @@ class Grafo:
 	def ehVizinho(self, estrutura, u, v):
 		ehViz = False
 		if self.tipoEstrutura == "A":
+			v = verificaU(v)
 			if self.tipo == "D":
 				if estrutura[u][v] != 0:
 					ehViz = True
@@ -619,22 +612,24 @@ class Grafo:
 		return estrutura
 		
 	# gera subgrafo induzido por arestas
-	def geraSubgrafoIA(self, matriz, lista):
+	def geraSubgrafoIA(self, estrutura, lista):
 		tamLista = len(lista)
 		for i in range(tamLista):
-			self.delAresta(matriz, lista[i][0], lista[i][1])
+			self.delAresta(estrutura, lista[i][0], lista[i][1])
 		i = 0
 		while i < self.qtdVertices:
 			cont = 0
 			for j in range(self.qtdArestas):
-				if matriz[j][i] == 0:
+				if estrutura[j][i] == 0:
 					cont += 1
 			if cont == self.qtdArestas:
 				for k in range(self.qtdArestas):
-					del matriz[k][i]
+					del estrutura[k][i]
 				self.qtdVertices -= 1
 			i += 1
-		return matriz
+		return estrutura
+	
+	# verifica se u pertence a lista de vertices
 	def verificaU(self,u):
 		for i in range(len(self.listaDeVertices)):
 			if self.listaDeVertices[i] == u:
