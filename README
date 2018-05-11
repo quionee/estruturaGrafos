@@ -1,0 +1,7 @@
+Instruções de uso:
+ -> Executar o arquivo "main.py"
+
+Legenda:
+ -> L = lista de adjacencia
+ -> A = matriz de adjacencia
+ -> I = matriz de incidencia
