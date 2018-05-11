@@ -478,7 +478,6 @@ class Grafo:
 				while i < self.qtdArestas and not(encontrou):
 					if estrutura[i][u] > 0 and estrutura[i][v] < 0:
 						del estrutura[i]
-						self.qtdArestas = self.qtdArestas - 1
 						encontrou = True
 					i += 1
 				if not(encontrou):
@@ -499,44 +498,45 @@ class Grafo:
 			else:
 				estrutura[u][v] = 0
 				estrutura[v][u] = 0
-			self.qtdArestas -= 1
 		else:
 			j = 0
+			valor = self.listaDeVertices[v]
 			if self.tipo == "D":
 				if self.valorado:
 					while j < len(estrutura[u]) and not(encontrou):
-						if estrutura[u][j][0] == v:
+						if estrutura[u][j][0] == valor:
 							del estrutura[u][j]
 							encontrou = True
 						j += 1
 				else:
 					while j < len(estrutura[u]) and not(encontrou):
-						if estrutura[u][j] == v:
+						if estrutura[u][j] == valor:
 							del estrutura[u][j]
 							encontrou = True
 						j += 1
 			else:
 				if self.valorado:
 					while j < len(estrutura[u]) and not(encontrou):
-						if estrutura[u][j][0] == v:
+						if estrutura[u][j][0] == valor:
 							del estrutura[u][j]
 							encontrou = True
 						j += 1
 					j = 0
 					while j < len(estrutura[v]) and not(encontrou):
-						if estrutura[v][j][0] == u:
+						valor = listaDeVertices[u]
+						if estrutura[v][j][0] == valor:
 							del estrutura[v][j]
 							encontrou = True
 						j += 1
 				else:
 					while j < len(estrutura[u]) and not(encontrou):
-						if estrutura[u][j] == v:
+						if estrutura[u][j] == valor:
 							del estrutura[u][j]
 							encontrou = True
 						j += 1
 					j = 0
 					while j < len(estrutura[v]) and not(encontrou):
-						if estrutura[v][j] == v:
+						if estrutura[v][j] == valor:
 							del estrutura[v][j]
 							encontrou = True
 						j += 1
@@ -554,9 +554,10 @@ class Grafo:
 	def geraSubgrafoIA(self, estrutura, lista):
 		tamLista = len(lista)
 		for h in range(tamLista):
+			u2 = lista[h][0]
+			v2 = lista[h][1]
 			u = self.verificaU(lista[h][0])
 			v = self.verificaU(lista[h][1])
-			print(u,v)
 			self.delAresta(estrutura, u, v)
 			if self.tipoEstrutura == "A":
 				i = 0
@@ -570,25 +571,116 @@ class Grafo:
 							self.delVertice(estrutura, i)
 					i += 1
 			elif self.tipoEstrutura == "L":
-				if len(estrutura[u]) == 0 and len(estrutura[v]) == 0:
-					self.delVertice(estrutura,u)
-					self.delVertice(estrutura,v)
-				elif len(estrutura[u]) == 0 and len(estrutura[v]) != 0:
-					self.delVertice(estrutura,u)
-				elif len(estrutura[u]) != 0 and len(estrutura[v]) == 0:
-					self.delVertice(estrutura,v)
-		#~ else:
-			#~ i = 0
-			#~ while i < self.qtdVertices:
-				#~ cont = 0
-				#~ for j in range(self.qtdArestas):
-					#~ if estrutura[j][i] == 0:
-						#~ cont += 1
-				#~ if cont == self.qtdArestas:
-					#~ for k in range(self.qtdArestas):
-						#~ del estrutura[k][i]
-					#~ self.qtdVertices -= 1
-				#~ i += 1
+				if self.valorado:
+					if v > u:
+						j = 0
+						existe = False
+						while j < self.qtdVertices and not(existe):
+							k = 0
+							while k < len(estrutura[j]) and not(existe):
+								if estrutura[j][k][0] == v2:
+									existe = True
+								elif any(w == v2 and estrutura[v] != [] for w in self.listaDeVertices):
+									existe = True
+								k += 1
+							j += 1
+						if not(existe):
+							del estrutura[v]
+							self.qtdVertices -= 1
+							self.listaDeVertices.remove(v2)
+					if len(estrutura[u]) == 0:
+						j = 0
+						existe = False
+						while j < self.qtdVertices and not(existe):
+							k = 0
+							while k < len(estrutura[j]) and not(existe):
+								if estrutura[j][k][0] == u2:
+									existe = True
+								k += 1
+							j += 1
+						if not(existe):
+							del estrutura[u]
+							self.qtdVertices -= 1
+							self.listaDeVertices.remove(u2)
+					if len(estrutura) != 0 and v < u:
+						j = 0
+						existe = False
+						while j < self.qtdVertices and not(existe):
+							k = 0
+							while k < len(estrutura[j]) and not(existe):
+								if estrutura[j][k][0] == v2:
+									existe = True
+								elif any(w == v2 and estrutura[v] != [] for w in self.listaDeVertices):
+									existe = True
+								k += 1
+							j += 1
+						if not(existe):
+							del estrutura[v]
+							self.qtdVertices -= 1
+							self.listaDeVertices.remove(v2)
+					
+				else:
+					if v > u:
+						j = 0
+						existe = False
+						while j < self.qtdVertices and not(existe):
+							k = 0
+							while k < len(estrutura[j]) and not(existe):
+								if estrutura[j][k] == v2:
+									existe = True
+								elif any(w == v2 and estrutura[v] != [] for w in self.listaDeVertices):
+									existe = True
+								k += 1
+							j += 1
+						if not(existe):
+							del estrutura[v]
+							self.qtdVertices -= 1
+							self.listaDeVertices.remove(v2)
+					if len(estrutura[u]) == 0:
+						j = 0
+						existe = False
+						while j < self.qtdVertices and not(existe):
+							k = 0
+							while k < len(estrutura[j]) and not(existe):
+								if estrutura[j][k] == u2:
+									existe = True
+								k += 1
+							j += 1
+						if not(existe):
+							del estrutura[u]
+							self.qtdVertices -= 1
+							self.listaDeVertices.remove(u2)
+					if len(estrutura) != 0 and v < u:
+						j = 0
+						existe = False
+						while j < self.qtdVertices and not(existe):
+							k = 0
+							while k < len(estrutura[j]) and not(existe):
+								if estrutura[j][k] == v2:
+									existe = True
+								elif any(w == v2 and estrutura[v] != [] for w in self.listaDeVertices):
+									existe = True
+								k += 1
+							j += 1
+						if not(existe):
+							del estrutura[v]
+							self.qtdVertices -= 1
+							self.listaDeVertices.remove(v2)
+			else:
+				i = 0
+				while i < self.qtdVertices:
+					cont = 0
+					for j in range(self.qtdArestas):
+						if estrutura[j][i] == 0:
+							cont += 1
+					if cont == self.qtdArestas:
+						for k in range(self.qtdArestas):
+							del estrutura[k][i]
+						self.qtdVertices -= 1
+						u = self.listaDeVertices[i]
+						v = self.verificaU(u)
+						del self.listaDeVertices[v]
+					i += 1
 		return estrutura
 
 	# verifica se u pertence a lista de vertices
@@ -602,3 +694,4 @@ class Grafo:
 			return u
 		else:
 			return u * 10000
+

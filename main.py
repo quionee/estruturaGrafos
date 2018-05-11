@@ -1,4 +1,3 @@
-
 from grafo import Grafo
 
 def leArquivo(nomeArq, valorado):
@@ -186,10 +185,8 @@ def main():
             invalido = False
             for i in range(tamLista):
                 u = int(input())
-
                 v = int(input())
                 lista.append([u, v])
-                print(lista)
                 if u < 0 and u >= grafo.qtdVertices and v < 0 and v >= grafo.qtdVertices:
                     invalido = True
             if invalido:
