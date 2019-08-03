@@ -1,6 +1,6 @@
 from grafo import Grafo
 
-def leArquivo(nomeArq, valorado):
+def lerArquivo(nomeArq, valorado):
     arquivo = open(nomeArq)
     tipo = arquivo.readline()
 
@@ -30,8 +30,8 @@ def leArquivo(nomeArq, valorado):
     return lista
 
 def main():
-    nomeArq = input("Nome do arquivo: ")
-    arquivo = open(nomeArq)
+    nomeArq = input("\nNome do arquivo: ")
+    arquivo = open("arquivos_teste/" + nomeArq)
 
     if nomeArq.split('_')[2][:1] == "u":
         valorado = False
@@ -40,7 +40,7 @@ def main():
 
     tipo = arquivo.readline()
 
-    print('''--> Escolha sua forma de armazenamento do grafo:
+    print('''\n--> Escolha sua forma de armazenamento do grafo:
     -Digite A para Matriz de Adjacencia
     -Digite I para Matriz de Incidencia
     -Digite L para Lista de Adjacencia''')
@@ -51,13 +51,13 @@ def main():
     
     opcaoEscolhida = False
     while not(opcaoEscolhida):
-        tipoEstrutura = input("Tipo de estrutura: ")
+        tipoEstrutura = input("\nTipo de estrutura: ")
         if tipoEstrutura == "A" or tipoEstrutura == "L" or tipoEstrutura == "I":
             opcaoEscolhida = True
         else:
             print("\nTipo de estrutura invalida\n")
     
-    lista = leArquivo(nomeArq, valorado)
+    lista = lerArquivo("arquivos_teste/" + nomeArq, valorado)
     grafo = Grafo(tipo, valorado, nomeArq, qtdArestas, lista, tipoEstrutura);
     
     if grafo.tipoEstrutura == "A":
@@ -71,7 +71,7 @@ def main():
         grafo.imprimeListaAdjacencia(estrutura)
 
     menu = True
-    print('''--> Escolha uma acao, digite:
+    print('''\n--> Escolha uma acao, digite:
     -1 para obter vizinhos de u
     -2 para obter predecessores de u
     -3 para obter sucessores de u
@@ -89,9 +89,9 @@ def main():
     -SAIR para encerrar o programa''')
 
     while menu:
-        opcao = int(input("Sua escolha eh: "))
+        opcao = input("\nSua escolha eh: ")
         #~ obtem vizinhos de u
-        if opcao == 1:
+        if opcao == "1":
             u = int(input("u: "))
             u = grafo.verificaU(u)
             if u >= 0 and u < grafo.qtdVertices:
@@ -99,7 +99,7 @@ def main():
             else:
                 print("Vertice invalido")
         #~ obtem predecessores
-        elif opcao == 2:
+        elif opcao == "2":
             u = int(input("u: "))
             u = grafo.verificaU(u)
             if u >= 0 and u < grafo.qtdVertices:
@@ -107,7 +107,7 @@ def main():
             else:
                 print("Vertice invalido")
         #~ obtem sucessores
-        elif opcao == 3:
+        elif opcao == "3":
             u = int(input("u: "))
             u = grafo.verificaU(u)
             if u >= 0 and u < grafo.qtdVertices:
@@ -115,7 +115,7 @@ def main():
             else:
                 print("Vertice invalido")
         #~ verifica se u e v sao vizinhos
-        elif opcao == 4:
+        elif opcao == "4":
             u = int(input("u: "))
             v = int(input("v: "))
             u = grafo.verificaU(u)
@@ -128,7 +128,7 @@ def main():
             else:
                 print("Algum vertice invalido")
         #~ verifica se v eh predecessor de u
-        elif opcao == 5:
+        elif opcao == "5":
             u = int(input("u: "))
             v = int(input("v: "))
             u = grafo.verificaU(u)
@@ -140,7 +140,7 @@ def main():
             else:
                 print("Algum vertice invalido")
         #~ verifica se v eh sucessor de u
-        elif opcao == 6:
+        elif opcao == "6":
             u = int(input("u: "))
             v = int(input("v: "))
             if u >= 0 and u < grafo.qtdVertices and v >= 0 and v < grafo.qtdVertices:
@@ -151,7 +151,7 @@ def main():
             else:
                 print("Algum vertice invalido")
         #~ deleta o vertice u
-        elif opcao == 7:
+        elif opcao == "7":
             u = int(input("u: "))
             u = grafo.verificaU(u)
             if u >= 0 and u < grafo.qtdVertices:
@@ -159,7 +159,7 @@ def main():
             else:
                 print("Vertice invalido")
         #~ deleta a aresta u v
-        elif opcao == 8:
+        elif opcao == "8":
             u = int(input("u: "))
             v = int(input("v: "))
             u = grafo.verificaU(u)
@@ -169,12 +169,12 @@ def main():
             else:
                 print("Algum vertice invalido")
         #~ gera um subgrafo induzido por vertices
-        elif opcao == 9:
+        elif opcao == "9":
             tamLista = int(input("Quantidade de vertices a serem retirados: "))
             lista = []
             invalido = False
             for i in range(tamLista):
-                aux = int(input())
+                aux = int(input("vertice: "))
                 lista.append(aux)
                 if aux < 0 and aux >= grafo.qtdVertices:
                     invalido = True
@@ -183,13 +183,13 @@ def main():
             else:
                 grafo.geraSubgrafoIV(estrutura, lista)
         #~ gera um suggrafo induzido por arestas
-        elif opcao == 10:
+        elif opcao == "10":
             tamLista = int(input("Quantidade de arestas a serem retiradas: "))
             lista = []
             invalido = False
             for i in range(tamLista):
-                u = int(input())
-                v = int(input())
+                u = int(input("u: "))
+                v = int(input("v: "))
                 lista.append([u, v])
                 if u < 0 and u >= grafo.qtdVertices and v < 0 and v >= grafo.qtdVertices:
                     invalido = True
@@ -198,7 +198,7 @@ def main():
             else:
                 grafo.geraSubgrafoIA(estrutura, lista)
         #~ imprime o grafo atual
-        elif opcao == 11:
+        elif opcao == "11":
             if grafo.tipoEstrutura == "A":
                 grafo.imprimeMatrizAdjacencia(estrutura)
             elif grafo.tipoEstrutura == "I":
@@ -207,7 +207,7 @@ def main():
                 grafo.imprimeListaAdjacencia(estrutura)
             print("\n")
         #~ converte para Matriz de Adjacência
-        elif opcao == 12:
+        elif opcao == "12":
             if grafo.tipoEstrutura == "I":
                 grafo.convMatIncList(estrutura)
                 estrutura = grafo.matrizAdjacencia()
@@ -219,7 +219,7 @@ def main():
             else:
                 print("\nSua estrutura atual ja eh matriz de adjacencia\n")
         #~ converte para Matriz de Incidência
-        elif opcao == 13:
+        elif opcao == "13":
             if grafo.tipoEstrutura == "A":
                 grafo.convMatAdList(estrutura)
                 estrutura = grafo.matrizIncidencia()
@@ -231,7 +231,7 @@ def main():
             else:
                 print("\nSua estrutura atual ja eh matriz de incidencia\n")
         #~ converte para Lista de Adjacência
-        elif opcao == 14:
+        elif opcao == "14":
             if grafo.tipoEstrutura == "A":
                 grafo.convMatAdList(estrutura)
                 estrutura = grafo.listaAdjacencia()
@@ -243,7 +243,7 @@ def main():
             else:
                 print("\nSua estrutura atual ja eh lista de adjacencia\n")
         #~ imprime o menu novamente
-        elif opcao == 15:
+        elif opcao == "15":
             print('''--> Escolha uma acao, digite:
             -1 para obter vizinhos de u
             -2 para obter predecessores de u
@@ -264,7 +264,7 @@ def main():
         elif opcao == "SAIR":
             menu = False
         else:
-            print("->Opcao invalida, tente novamente\n")
+            print("\n->Opcao invalida, tente novamente\n")
         
 
 if __name__ == "__main__":
