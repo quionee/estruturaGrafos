@@ -29,4 +29,4 @@ Para executar, basta rodar o comando `python3 main.py` no terminal e entrar com 
 
 Os resultados podem ser verificados durante a execução, a opção *11* de execução imprime o grafo na estrutura de dados que estiver sendo usada para armazenamento no momento.
 
-Copyright (c) 2019 Felipe Ferreira Carvalho Silva, Lorena Kerollen Botelho Tavares, Rodrigo Pinto Herculano
+Copyright (c) 2018 Felipe Ferreira Carvalho Silva, Lorena Kerollen Botelho Tavares, Rodrigo Pinto Herculano
